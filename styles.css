@@ -1,0 +1,187 @@
+/* NEB Class 12 GPA Calculator Styles */
+
+:root {
+  --color-primary: #1e3a5f;
+  --color-secondary: #2563eb;
+  --color-accent: #059669;
+  --color-background: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #0f172a;
+  --color-border: #e2e8f0;
+}
+
+/* Base resets & typography */
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Active stream tab styling */
+.active-stream {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.dark .active-stream {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.2s ease-out forwards;
+}
+
+/* Input numbers clean up */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Range input styling */
+input[type="range"] {
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #cbd5e1;
+}
+
+.dark input[type="range"] {
+  background-color: #334155;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Subject Card Hover & Focus States */
+.subject-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.subject-card:hover {
+  border-color: #93c5fd;
+}
+.dark .subject-card:hover {
+  border-color: #1e40af;
+}
+
+/* NG Alert Glowing border */
+.has-ng-border {
+  border-color: #fda4af !important;
+  background-color: #fff1f2 !important;
+}
+.dark .has-ng-border {
+  border-color: #9f1239 !important;
+  background-color: #4c051933 !important;
+}
+
+/* =========================================================================
+   PRINT STYLES FOR OFFICIAL NEB TRANSCRIPT FORMAT
+   ========================================================================= */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide everything on the page except the printable transcript */
+  header,
+  footer,
+  main,
+  #preset-menu,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  #printable-transcript {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    padding: 24px !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  #printable-transcript table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  #printable-transcript th,
+  #printable-transcript td {
+    border: 1px solid #475569 !important;
+    padding: 6px 8px !important;
+    color: #000000 !important;
+  }
+
+  #printable-transcript thead th {
+    background-color: #f1f5f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Avoid page breaks inside table rows */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+}

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEB Class 12 GPA Calculator | All Streams (Science, Management, Humanities, Law, Education)</title>
+  <meta name="description" content="Official NEB Class 12 GPA Calculator for all streams according to Nepal National Examinations Board latest Letter Grading Directive (2078). Calculate GPA, Theory & Practical grades, check NG criteria, and print official grade sheet.">
+  <meta name="keywords" content="NEB Class 12 GPA Calculator, NEB GPA Calculator Nepal, Class 12 Science GPA, Management GPA Calculator, NEB grading system 2078, CDC Nepal credit hours">
+  <meta name="author" content="Dipak Jaisi">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="NEB Class 12 GPA Calculator - Official Nepal Curriculum">
+  <meta property="og:description" content="Accurate GPA calculator for NEB Class 12 all streams with theory/practical 35% NG check and printable grade sheet.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Outfit (Headings) & Plus Jakarta Sans (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a5f',
+              950: '#0f172a',
+            },
+            accent: {
+              emerald: '#059669',
+              amber: '#d97706',
+              rose: '#e11d48',
+            }
+          },
+          fontFamily: {
+            heading: ['Outfit', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Phosphor Icons Web -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css"/>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+
+  <!-- Chart.js & Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- TOP BANNER: Official CDC / NEB Notice -->
+  <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-xs py-2 px-4 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-500/30 text-blue-200 border border-blue-400/30">
+          Official NEB Criteria 2078/2081
+        </span>
+        <span class="text-slate-300 hidden sm:inline">
+          National Examinations Board (NEB) Nepal • Letter Grading Directive with Individual 35% Pass Criterion in Theory & Practical
+        </span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-300">
+        <button id="btn-quick-guide" class="hover:text-white underline cursor-pointer flex items-center gap-1">
+          <i class="ph ph-info text-sm" aria-hidden="true"></i> Grading Criteria
+        </button>
+        <span class="text-slate-500">|</span>
+        <span class="text-emerald-400 font-medium flex items-center gap-1">
+          <i class="ph-bold ph-check-circle text-xs" aria-hidden="true"></i> 100% Accurate Formula
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg p-1">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+          <i class="ph-bold ph-calculator text-2xl" aria-hidden="true"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 dark:text-white">
+              NEB<span class="text-blue-600 dark:text-blue-400">GPA</span>
+            </span>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+              Class 12
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">All Streams • CDC Nepal Grading System</p>
+        </div>
+      </a>
+
+      <!-- Quick Action Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Preset Dropdown -->
+        <div class="relative inline-block text-left">
+          <button id="preset-btn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+            <i class="ph ph-magic-wand text-base text-blue-600 dark:text-blue-400" aria-hidden="true"></i>
+            <span class="hidden md:inline">Sample Marks</span>
+            <i class="ph ph-caret-down text-xs ml-0.5" aria-hidden="true"></i>
+          </button>
+          <div id="preset-menu" class="hidden absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 py-1.5 z-50 animate-fadeIn">
+            <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 dark:border-slate-700/70">
+              Load Demo Presets
+            </div>
+            <button class="preset-option w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between cursor-pointer" data-preset="topper">
+              <span>🌟 Distinction / Topper (3.85 GPA)</span>
+            </button>
+            <button class="preset-option w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between cursor-pointer" data-preset="average">
+              <span>📈 First Division (3.15 GPA)</span>
+            </button>
+            <button class="preset-option w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between cursor-pointer" data-preset="borderline">
+              <span>⚠️ Borderline Pass (2.10 GPA)</span>
+            </button>
+            <button class="preset-option w-full text-left px-3 py-2 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-between cursor-pointer" data-preset="ng-demo">
+              <span>🚫 Theory NG Demo (Shows NG Alert)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Print Transcript Button -->
+        <button id="btn-print-top" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" title="Print or Save Transcript as PDF">
+          <i class="ph ph-printer text-base" aria-hidden="true"></i>
+          <span class="hidden sm:inline">Print / PDF</span>
+        </button>
+
+        <!-- Dark / Light Theme Toggle -->
+        <button id="theme-toggle" type="button" class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer" aria-label="Toggle Dark Mode">
+          <i id="theme-icon" class="ph-bold ph-moon text-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- HERO SECTION -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 lg:p-10 shadow-xl border border-blue-800/40">
+      <div class="relative z-10 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold mb-4 backdrop-blur-sm">
+          <i class="ph-bold ph-graduation-cap text-sm" aria-hidden="true"></i>
+          Nepal National Examinations Board (NEB) 2081/2082
+        </div>
+        <h1 class="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl tracking-tight leading-tight mb-3">
+          Class 12 GPA Calculator
+        </h1>
+        <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-6">
+          Calculate your accurate weighted GPA according to the Curriculum Development Centre (CDC) Nepal credit-hour system. Supports <strong class="text-white font-semibold">Science, Management, Humanities, Law, Education</strong>, and custom subject combinations with automatic 35% Theory & Practical pass checks.
+        </p>
+
+        <!-- Quick Stream Pills -->
+        <div class="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-300">
+          <span class="text-slate-400">Available Streams:</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">🔬 Science</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">📊 Management</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">📚 Humanities</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">⚖️ Law</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">🎓 Education</span>
+          <span class="px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-xs border border-white/10">⚙️ Custom</span>
+        </div>
+      </div>
+
+      <!-- Decorative Background Glow -->
+      <div class="absolute right-0 top-0 -mt-12 -mr-12 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute right-1/4 bottom-0 -mb-12 w-64 h-64 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+    </div>
+
+    <!-- STREAM SELECTOR & MODE CONTROLS -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        
+        <!-- Stream Tabs -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            Select Your Stream:
+          </label>
+          <div class="inline-flex flex-wrap p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-xl gap-1 border border-slate-200 dark:border-slate-700/60" role="tablist">
+            <button class="stream-tab active-stream px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5" data-stream="science" role="tab" aria-selected="true">
+              <i class="ph-bold ph-atom" aria-hidden="true"></i>
+              <span>Science</span>
+            </button>
+            <button class="stream-tab px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" data-stream="management" role="tab" aria-selected="false">
+              <i class="ph-bold ph-chart-line-up" aria-hidden="true"></i>
+              <span>Management</span>
+            </button>
+            <button class="stream-tab px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" data-stream="humanities" role="tab" aria-selected="false">
+              <i class="ph-bold ph-book-open-text" aria-hidden="true"></i>
+              <span>Humanities</span>
+            </button>
+            <button class="stream-tab px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" data-stream="law" role="tab" aria-selected="false">
+              <i class="ph-bold ph-scales" aria-hidden="true"></i>
+              <span>Law</span>
+            </button>
+            <button class="stream-tab px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" data-stream="education" role="tab" aria-selected="false">
+              <i class="ph-bold ph-chalkboard-teacher" aria-hidden="true"></i>
+              <span>Education</span>
+            </button>
+            <button class="stream-tab px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" data-stream="custom" role="tab" aria-selected="false">
+              <i class="ph-bold ph-sliders" aria-hidden="true"></i>
+              <span>Custom / Other</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Input Mode Switcher (Marks vs Letter Grade) -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+              Input Mode:
+            </label>
+            <div class="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+              <button id="mode-marks" class="px-3 py-1.5 rounded-md text-xs font-bold bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-300 shadow-sm transition-all cursor-pointer flex items-center gap-1.5" title="Input theory and practical marks with automatic 35% NG checking">
+                <i class="ph-bold ph-pencil-simple" aria-hidden="true"></i>
+                <span>Detailed Marks (Recommended)</span>
+              </button>
+              <button id="mode-grades" class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5" title="Directly select letter grades A+, A, B+, etc.">
+                <i class="ph-bold ph-letter-circle-p" aria-hidden="true"></i>
+                <span>Letter Grades Only</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Stream Description & Elective Customizer Info -->
+      <div id="stream-info-banner" class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between text-xs text-slate-600 dark:text-slate-400 gap-2">
+        <div class="flex items-center gap-2">
+          <i class="ph-fill ph-check-circle text-emerald-600 dark:text-emerald-400 text-base" aria-hidden="true"></i>
+          <span id="stream-desc-text">
+            Class 12 Science: Compulsory English (4 CH), Nepali (3 CH), Physics (5 CH), Chemistry (5 CH), Mathematics (5 CH), Biology / Computer Science (5 CH).
+          </span>
+        </div>
+        <div id="custom-add-btn-container" class="hidden">
+          <button id="btn-add-subject" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-sm cursor-pointer">
+            <i class="ph-bold ph-plus" aria-hidden="true"></i>
+            <span>Add Custom Subject</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN CALCULATOR WORKSPACE -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT COLUMN: SUBJECT INPUT FORMS (7 or 8 Cols) -->
+      <section class="lg:col-span-7 xl:col-span-8 space-y-4">
+        
+        <!-- Table Header / Explanatory Bar -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-3 px-4 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <div class="flex items-center gap-2 font-semibold text-slate-700 dark:text-slate-300">
+            <i class="ph ph-books text-base text-blue-600 dark:text-blue-400" aria-hidden="true"></i>
+            <span>Subject Marks Breakdown</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1 text-slate-500">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Min 35% in each part to pass
+            </span>
+            <button id="btn-reset-all" type="button" class="text-rose-600 dark:text-rose-400 hover:underline font-medium cursor-pointer flex items-center gap-1">
+              <i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i> Reset All
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Subject List Container -->
+        <div id="subjects-container" class="space-y-3">
+          <!-- Dynamically populated by app.js -->
+        </div>
+
+        <!-- Optional 7th Subject / Add Subject trigger for standard streams -->
+        <div id="optional-add-wrapper" class="p-4 bg-slate-100/80 dark:bg-slate-900/60 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+            <i class="ph ph-plus-circle text-lg text-blue-600 dark:text-blue-400" aria-hidden="true"></i>
+            <span>Studying an extra elective subject (7th subject)?</span>
+          </div>
+          <button id="btn-toggle-7th-subject" type="button" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-blue-600 dark:text-blue-400 font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all cursor-pointer">
+            + Add Optional 7th Subject
+          </button>
+        </div>
+
+        <!-- Quick Tips for NEB Students -->
+        <div class="bg-blue-50/70 dark:bg-blue-950/30 rounded-xl p-4 border border-blue-200/60 dark:border-blue-900/40 text-xs text-blue-900 dark:text-blue-200 space-y-2">
+          <div class="font-bold flex items-center gap-1.5 text-blue-800 dark:text-blue-300">
+            <i class="ph-bold ph-lightbulb text-base" aria-hidden="true"></i> Important NEB Grading Rules
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-slate-700 dark:text-slate-300">
+            <li><strong>Theory Minimum:</strong> You must score at least <strong>26.25 / 75 marks</strong> (or 17.5 / 50 marks) in theory exam.</li>
+            <li><strong>Practical Minimum:</strong> You must score at least <strong>8.75 / 25 marks</strong> (or 17.5 / 50 marks) in internal/practical exam.</li>
+            <li><strong>Non-Graded (NG):</strong> Scoring below 35% in either Theory or Practical results in <strong>NG (Grade Point 0.0)</strong> for that subject. Students with NG in up to 2 subjects can appear in the immediate supplementary exam.</li>
+            <li><strong>GPA Formula:</strong> $\text{GPA} = \frac{\sum (\text{Credit Hours} \times \text{Subject Grade Point})}{\text{Total Credit Hours}}$.</li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: LIVE SCORECARD & STATS (5 or 4 Cols - STICKY) -->
+      <aside class="lg:col-span-5 xl:col-span-4 space-y-4 lg:sticky lg:top-22">
+        
+        <!-- MAIN RESULT SCORECARD -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 shadow-lg border border-slate-200 dark:border-slate-800 relative overflow-hidden transition-colors">
+          
+          <!-- Card Header -->
+          <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Class 12 Result Summary</span>
+              <h2 class="font-heading font-extrabold text-lg text-slate-900 dark:text-white">Calculated NEB GPA</h2>
+            </div>
+            <span id="result-status-pill" class="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+              <i class="ph-bold ph-check text-xs" aria-hidden="true"></i> PASSED
+            </span>
+          </div>
+
+          <!-- Big GPA Display with Circular Accent -->
+          <div class="text-center py-4 bg-gradient-to-b from-slate-50 to-blue-50/40 dark:from-slate-800/60 dark:to-slate-800/20 rounded-2xl border border-slate-100 dark:border-slate-800/80 mb-5 relative">
+            <div class="text-xs uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 mb-1">
+              Grade Point Average
+            </div>
+            <div class="flex items-baseline justify-center gap-1">
+              <span id="final-gpa-display" class="font-heading font-extrabold text-5xl sm:text-6xl text-blue-600 dark:text-blue-400 tracking-tight transition-all">
+                3.65
+              </span>
+              <span class="text-slate-400 font-bold text-lg">/ 4.0</span>
+            </div>
+
+            <!-- Letter Grade & Remark -->
+            <div class="mt-3 flex items-center justify-center gap-2">
+              <span id="final-grade-badge" class="px-3 py-1 rounded-lg text-sm font-extrabold bg-blue-600 text-white shadow-sm">
+                A+
+              </span>
+              <span id="final-remark-text" class="text-sm font-bold text-slate-700 dark:text-slate-200">
+                Outstanding
+              </span>
+            </div>
+
+            <!-- NG Warning alert if any subject is NG -->
+            <div id="ng-alert-box" class="hidden mt-3 mx-4 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 text-xs font-medium text-left flex items-start gap-2 animate-fadeIn">
+              <i class="ph-bold ph-warning-circle text-rose-600 text-base shrink-0 mt-0.5" aria-hidden="true"></i>
+              <div>
+                <strong class="font-bold">Result: Non-Graded (NG)</strong>
+                <p id="ng-alert-desc" class="mt-0.5 text-[11px] text-rose-700 dark:text-rose-300">
+                  You have scored below 35% in some subject(s). GPA is shown for evaluation, but official certificate requires passing supplementary exam.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Metrics Grid -->
+          <div class="grid grid-cols-2 gap-2.5 mb-5 text-xs">
+            <!-- Approx Percentage -->
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <span class="text-slate-500 dark:text-slate-400 block font-medium">Equiv. Percentage:</span>
+              <span id="approx-pct-display" class="font-heading font-extrabold text-base text-slate-900 dark:text-white">
+                91.25%
+              </span>
+              <span class="text-[10px] text-slate-400 block">(GPA × 25 standard)</span>
+            </div>
+
+            <!-- Total Marks if marks mode -->
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <span class="text-slate-500 dark:text-slate-400 block font-medium">Total Marks:</span>
+              <span id="total-marks-display" class="font-heading font-extrabold text-base text-slate-900 dark:text-white">
+                475 / 500
+              </span>
+              <span id="marks-pct-display" class="text-[10px] text-slate-400 block">(85.5% scored)</span>
+            </div>
+
+            <!-- Total Credit Hours -->
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <span class="text-slate-500 dark:text-slate-400 block font-medium">Total Credit Hours:</span>
+              <span id="total-credits-display" class="font-heading font-extrabold text-base text-slate-900 dark:text-white">
+                27.0 CH
+              </span>
+              <span class="text-[10px] text-slate-400 block">Class 12 CDC Load</span>
+            </div>
+
+            <!-- Quality Points (CH x GP) -->
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <span class="text-slate-500 dark:text-slate-400 block font-medium">Quality Points:</span>
+              <span id="total-qp-display" class="font-heading font-extrabold text-base text-slate-900 dark:text-white">
+                98.55
+              </span>
+              <span class="text-[10px] text-slate-400 block">Sum of (CH × GP)</span>
+            </div>
+          </div>
+
+          <!-- Radar / Bar Chart Accordion -->
+          <div class="mb-5">
+            <button id="toggle-chart-btn" type="button" class="w-full py-2 px-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors">
+              <span class="flex items-center gap-1.5">
+                <i class="ph-bold ph-chart-bar text-blue-600 dark:text-blue-400" aria-hidden="true"></i> Subject Performance Chart
+              </span>
+              <i id="chart-caret" class="ph ph-caret-down transition-transform" aria-hidden="true"></i>
+            </button>
+            <div id="chart-container" class="mt-3 p-2 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800 hidden">
+              <canvas id="performanceChart" height="200"></canvas>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-2">
+            <button id="btn-print-transcript" type="button" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <i class="ph-bold ph-printer text-lg" aria-hidden="true"></i>
+              <span>Print Official Grade Sheet</span>
+            </button>
+
+            <div class="grid grid-cols-2 gap-2">
+              <button id="btn-copy-summary" type="button" class="py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="ph-bold ph-copy" aria-hidden="true"></i>
+                <span id="copy-btn-text">Copy Summary</span>
+              </button>
+              <button id="btn-share-result" type="button" class="py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="ph-bold ph-share-network" aria-hidden="true"></i>
+                <span>Share Result</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TARGET GPA PLANNER / SIMULATOR CARD -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <i class="ph-bold ph-target text-base" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 class="font-heading font-bold text-sm text-slate-900 dark:text-white">Target GPA Simulator</h3>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Aiming for a specific GPA (e.g. 3.65)?</p>
+            </div>
+          </div>
+          
+          <div class="space-y-3 text-xs">
+            <div>
+              <label for="target-gpa-slider" class="flex justify-between font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <span>Target GPA:</span>
+                <span id="target-gpa-value" class="font-bold text-blue-600 dark:text-blue-400 text-sm">3.60 (A)</span>
+              </label>
+              <input id="target-gpa-slider" type="range" min="2.0" max="4.0" step="0.05" value="3.60" class="w-full accent-blue-600 cursor-pointer">
+            </div>
+
+            <div id="target-gpa-feedback" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+              <span class="block font-semibold text-slate-800 dark:text-slate-200">Required Average Performance:</span>
+              <p id="target-gpa-explanation" class="mt-1">
+                To achieve a 3.60 GPA, you need an average of 80% to 85% marks across all subjects, ensuring no subject falls below 70%.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- OFFICIAL NEB GRADING SCALE REFERENCE SECTION -->
+    <section class="mt-8 bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">CDC Nepal Guidelines</span>
+          <h2 class="font-heading font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-white mt-0.5">
+            NEB Class 12 Letter Grading Scale & Criteria (2078)
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Official evaluation scale based on percentage intervals, letter grades, and grade points.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            ✓ 35% Theory & Practical Rule Active
+          </span>
+        </div>
+      </div>
+
+      <!-- Grading Table -->
+      <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold uppercase text-[11px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+            <tr>
+              <th scope="col" class="py-3 px-4">Marks Percentage</th>
+              <th scope="col" class="py-3 px-4">Letter Grade</th>
+              <th scope="col" class="py-3 px-4">Grade Point (GP)</th>
+              <th scope="col" class="py-3 px-4">Remarks / Performance</th>
+              <th scope="col" class="py-3 px-4">Pass Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">90% to 100%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">A+</span></td>
+              <td class="py-3 px-4 font-bold">4.0</td>
+              <td class="py-3 px-4">Outstanding</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">80% to &lt;90%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">A</span></td>
+              <td class="py-3 px-4 font-bold">3.6</td>
+              <td class="py-3 px-4">Excellent</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">70% to &lt;80%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">B+</span></td>
+              <td class="py-3 px-4 font-bold">3.2</td>
+              <td class="py-3 px-4">Very Good</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">60% to &lt;70%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">B</span></td>
+              <td class="py-3 px-4 font-bold">2.8</td>
+              <td class="py-3 px-4">Good</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">50% to &lt;60%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300">C+</span></td>
+              <td class="py-3 px-4 font-bold">2.4</td>
+              <td class="py-3 px-4">Satisfactory</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">40% to &lt;50%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">C</span></td>
+              <td class="py-3 px-4 font-bold">2.0</td>
+              <td class="py-3 px-4">Acceptable</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+              <td class="py-3 px-4 font-semibold">35% to &lt;40%</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-300">D</span></td>
+              <td class="py-3 px-4 font-bold">1.6</td>
+              <td class="py-3 px-4">Basic</td>
+              <td class="py-3 px-4 text-emerald-600 dark:text-emerald-400 font-bold">Passed</td>
+            </tr>
+            <tr class="bg-rose-50/50 dark:bg-rose-950/20 hover:bg-rose-50 dark:hover:bg-rose-950/30">
+              <td class="py-3 px-4 font-semibold text-rose-600 dark:text-rose-400">Below 35% (&lt;35%)</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded font-extrabold bg-rose-200 text-rose-900 dark:bg-rose-900 dark:text-rose-200">NG</span></td>
+              <td class="py-3 px-4 font-bold text-rose-600 dark:text-rose-400">0.0</td>
+              <td class="py-3 px-4 text-rose-700 dark:text-rose-300">Not Graded</td>
+              <td class="py-3 px-4 text-rose-600 dark:text-rose-400 font-bold">Must Retake Exam</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FAQ ACCORDION -->
+      <div class="mt-8 space-y-3">
+        <h3 class="font-heading font-bold text-base text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+          <i class="ph-bold ph-question text-blue-600" aria-hidden="true"></i> Frequently Asked Questions (FAQ)
+        </h3>
+
+        <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+          <button class="faq-btn w-full px-4 py-3 text-left font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 flex justify-between items-center cursor-pointer">
+            <span>What happens if I get NG (Non-Graded) in one or two subjects?</span>
+            <i class="ph ph-plus text-slate-400 faq-icon" aria-hidden="true"></i>
+          </button>
+          <div class="faq-content hidden px-4 py-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            If you get NG in up to two subjects, you are eligible to sit for the immediate <strong>Grade Increment (Supplementary) Examination</strong> conducted by NEB roughly 1–2 months after result publication. Once you secure at least grade D (35%) in the re-exam, NEB issues your official transcript with final GPA. If a student receives NG in 3 or more subjects, they must appear in the annual examination next year.
+          </div>
+        </div>
+
+        <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+          <button class="faq-btn w-full px-4 py-3 text-left font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 flex justify-between items-center cursor-pointer">
+            <span>Can 25 practical marks save me if I fail theory?</span>
+            <i class="ph ph-plus text-slate-400 faq-icon" aria-hidden="true"></i>
+          </button>
+          <div class="faq-content hidden px-4 py-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <strong>No.</strong> Under the NEB Letter Grading Directive 2078, theory and practical marks are evaluated independently. Even if you score full 25/25 in practical, if your theory score is below 26.25/75 (35%), you will receive an <strong>NG in Theory</strong>, causing the subject to be Non-Graded.
+          </div>
+        </div>
+
+        <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+          <button class="faq-btn w-full px-4 py-3 text-left font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 flex justify-between items-center cursor-pointer">
+            <span>How do universities convert NEB GPA to percentage?</span>
+            <i class="ph ph-plus text-slate-400 faq-icon" aria-hidden="true"></i>
+          </button>
+          <div class="faq-content hidden px-4 py-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            In Nepal and for foreign university applications, the standard conversion accepted by Tribhuvan University, Kathmandu University, and foreign credential evaluation agencies is $\text{Percentage} = \text{GPA} \times 25$ (e.g., $3.60 \times 25 = 90.0\%$). In addition, this calculator also provides your exact aggregate percentage based on the actual marks you entered.
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- PRINTABLE GRADE SHEET / TRANSCRIPT TEMPLATE (Shown during print) -->
+  <div id="printable-transcript" class="hidden print:block bg-white text-slate-900 p-8 max-w-4xl mx-auto">
+    <!-- Official Nepal Header -->
+    <div class="text-center border-b-2 border-slate-900 pb-4 mb-6">
+      <div class="text-xs uppercase tracking-widest font-bold text-slate-600">Government of Nepal</div>
+      <div class="text-xs uppercase tracking-wider font-semibold text-slate-600">National Examinations Board (NEB)</div>
+      <h1 class="font-heading font-extrabold text-2xl text-slate-900 mt-1 uppercase">Grade Sheet Summary (Class 12)</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Letter Grading System (Directive 2078) • Curriculum Development Centre (CDC)</p>
+    </div>
+
+    <!-- Student Metadata Box (Editable for student) -->
+    <div class="grid grid-cols-2 gap-4 text-xs mb-6 border border-slate-300 p-3 rounded">
+      <div>
+        <p><strong>Student Name:</strong> <span id="print-student-name">...................................................</span></p>
+        <p class="mt-1"><strong>Registration / Symbol No.:</strong> <span id="print-symbol-no">................................</span></p>
+      </div>
+      <div>
+        <p><strong>Stream:</strong> <span id="print-stream-name">Science</span></p>
+        <p class="mt-1"><strong>School / College:</strong> <span id="print-school-name">...................................................</span></p>
+      </div>
+    </div>
+
+    <!-- Printable Subjects Table -->
+    <table class="w-full text-xs text-left border-collapse border border-slate-400 mb-6">
+      <thead>
+        <tr class="bg-slate-100 border-b border-slate-400 text-slate-800">
+          <th class="border border-slate-400 p-2">S.N.</th>
+          <th class="border border-slate-400 p-2">Subject Name</th>
+          <th class="border border-slate-400 p-2 text-center">Credit Hours (CH)</th>
+          <th class="border border-slate-400 p-2 text-center">Theory Grade</th>
+          <th class="border border-slate-400 p-2 text-center">Practical Grade</th>
+          <th class="border border-slate-400 p-2 text-center">Final Grade</th>
+          <th class="border border-slate-400 p-2 text-center">Grade Point (GP)</th>
+          <th class="border border-slate-400 p-2 text-center">Quality Points (CH×GP)</th>
+        </tr>
+      </thead>
+      <tbody id="print-table-body">
+        <!-- Dynamically rendered -->
+      </tbody>
+      <tfoot>
+        <tr class="font-bold bg-slate-50 border-t-2 border-slate-400">
+          <td colspan="2" class="border border-slate-400 p-2 text-right">TOTAL</td>
+          <td id="print-total-ch" class="border border-slate-400 p-2 text-center">27.0</td>
+          <td colspan="4" class="border border-slate-400 p-2 text-right">TOTAL QUALITY POINTS:</td>
+          <td id="print-total-qp" class="border border-slate-400 p-2 text-center">98.55</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- Final Results Box -->
+    <div class="grid grid-cols-3 gap-4 border-2 border-slate-800 p-4 rounded text-center mb-10">
+      <div>
+        <div class="text-[11px] uppercase font-bold text-slate-600">Grade Point Average (GPA)</div>
+        <div id="print-final-gpa" class="font-extrabold text-2xl text-slate-900 mt-1">3.65</div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase font-bold text-slate-600">Final Grade</div>
+        <div id="print-final-grade" class="font-extrabold text-2xl text-slate-900 mt-1">A+ (Outstanding)</div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase font-bold text-slate-600">Result Status</div>
+        <div id="print-final-status" class="font-extrabold text-2xl text-slate-900 mt-1">PASSED</div>
+      </div>
+    </div>
+
+    <!-- Official Signatures Area -->
+    <div class="flex justify-between items-end pt-12 text-xs text-center">
+      <div class="border-t border-slate-600 w-48 pt-1">
+        Checked By
+      </div>
+      <div class="border-t border-slate-600 w-48 pt-1">
+        Principal / Campus Chief
+      </div>
+      <div class="border-t border-slate-600 w-48 pt-1">
+        Controller of Examinations
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors py-6 print:hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-heading font-extrabold text-slate-800 dark:text-white">NEBGPA</span>
+        <span>• Dedicated to Nepal +2 Students</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>Curriculum Development Centre (CDC) Aligned</span>
+        <span>•</span>
+        <a href="https://github.com/dipakjaisi536-ctrl/calculator" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1">
+          <i class="ph-bold ph-github-logo text-sm" aria-hidden="true"></i> GitHub Repository
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Student Info Modal for Print -->
+  <div id="print-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-scaleUp">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="ph-bold ph-printer text-blue-600" aria-hidden="true"></i> Print Grade Sheet Details
+        </h3>
+        <button id="close-print-modal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+          <i class="ph-bold ph-x text-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400">
+        Enter your details to generate a customized NEB Class 12 transcript document.
+      </p>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Student Full Name:</label>
+          <input id="modal-student-name" type="text" placeholder="e.g. Aayush Sharma" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Symbol / Registration No.:</label>
+          <input id="modal-symbol-no" type="text" placeholder="e.g. 24800123" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">School / College Name:</label>
+          <input id="modal-school-name" type="text" placeholder="e.g. St. Xavier's College / KMC" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button id="modal-confirm-print" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+          <i class="ph-bold ph-printer text-base" aria-hidden="true"></i> Print / Save PDF
+        </button>
+        <button id="modal-cancel-print" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Subject Add Modal -->
+  <div id="custom-subject-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-scaleUp">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="ph-bold ph-plus-circle text-blue-600" aria-hidden="true"></i> Add Custom Subject
+        </h3>
+        <button id="close-custom-modal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+          <i class="ph-bold ph-x text-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Subject Name:</label>
+          <input id="custom-sub-name" type="text" placeholder="e.g. Hotel Management / Psychology" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Credit Hours (CH):</label>
+            <select id="custom-sub-ch" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+              <option value="5" selected>5.0 Credit Hours</option>
+              <option value="4">4.0 Credit Hours</option>
+              <option value="3">3.0 Credit Hours</option>
+              <option value="2.5">2.5 Credit Hours</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Mark Scheme:</label>
+            <select id="custom-sub-scheme" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+              <option value="75-25" selected>75 Theory / 25 Practical</option>
+              <option value="50-50">50 Theory / 50 Practical</option>
+              <option value="100-0">100 Theory (No practical)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button id="btn-confirm-add-custom" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer">
+          Add Subject to List
+        </button>
+        <button id="btn-cancel-add-custom" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
